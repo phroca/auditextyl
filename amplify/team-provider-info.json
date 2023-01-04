@@ -1,0 +1,21 @@
+{
+  "staging": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-auditextyl-staging-21508-authRole",
+      "UnauthRoleArn": "arn:aws:iam::229433807467:role/amplify-auditextyl-staging-21508-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::229433807467:role/amplify-auditextyl-staging-21508-authRole",
+      "Region": "eu-west-3",
+      "DeploymentBucketName": "amplify-auditextyl-staging-21508-deployment",
+      "UnauthRoleName": "amplify-auditextyl-staging-21508-unauthRole",
+      "StackName": "amplify-auditextyl-staging-21508",
+      "StackId": "arn:aws:cloudformation:eu-west-3:229433807467:stack/amplify-auditextyl-staging-21508/477c6510-8a43-11ed-a5ae-0669195c2e40",
+      "AmplifyAppId": "d22e34ylw3v1hl"
+    },
+    "categories": {
+      "auth": {
+        "auditextyldd1d6064": {},
+        "auditextyl4379396f": {}
+      }
+    }
+  }
+}
