@@ -1,7 +1,9 @@
 import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { Dimensions, SafeAreaView, ScrollView } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { Dimensions, SafeAreaView, ScrollView, Text } from 'react-native';
 import styled from 'styled-components/native';
+import TracabiliteService from '../services/TracabiliteService'
+import { formulaire } from "../models/formulaire";
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -24,7 +26,28 @@ const Title = styled.Text`
   font-weight: bold;
   text-align: center;
 `;
+
+const TracabiliteContent = styled.View`
+  width: ${widthContent}px;
+  align-items: center;
+  align-self: center;
+  justify-content: center;
+  background: #dddddd;
+  padding: 5px;
+  border-radius: 5px; 
+`;
 const TracabiliteScreen = () => {
+  const [tracabilite, setTracabilite] = useState(formulaire);
+
+  useEffect(()=> {
+    TracabiliteService.getListTracabilite().then((result)=> {
+      if(result?.data) {
+        setTracabilite(result?.data);
+      }
+    }).catch((error) => {
+      console.error(error);
+    })
+  },[TracabiliteService])
     return (
         <Container>
             <StatusBar style="auto" />
@@ -33,6 +56,11 @@ const TracabiliteScreen = () => {
                     <TitleBar>
                       <Title>Traçabilité</Title>
                     </TitleBar>
+                    <TracabiliteContent>
+                      <Text>{tracabilite?.nom}</Text>
+                      <Text>{tracabilite?.responsable}</Text>
+                      <Text>{tracabilite?.destinataire}</Text>
+                    </TracabiliteContent>
                 </ScrollView>
             </SafeAreaView>
         </Container>
