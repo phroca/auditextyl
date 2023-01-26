@@ -13,6 +13,23 @@ web-build/
 # macOS
 .DS_Store
 
+
+# Bundle artifacts
+*.jsbundle
+
+# CocoaPods
+/ios/Pods/
+
+# Expo
+.expo/
+web-build/
+dist/
+
+.vscode/
+
+.env
+.env.*
+
 #amplify-do-not-edit-begin
 amplify/\#current-cloud-backend
 amplify/.config/local-*
@@ -35,18 +52,6 @@ amplifytools.xcconfig
 **.sample
 #amplify-do-not-edit-end
 
-# Bundle artifacts
-*.jsbundle
-
-# CocoaPods
-/ios/Pods/
-
-# Expo
-.expo/
-web-build/
-dist/
-
-.vscode/
-
-.env
-.env.*
+amplify/
+amplify/.config/*
+.vscode/*

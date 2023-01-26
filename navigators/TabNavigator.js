@@ -5,7 +5,7 @@ import { StyleSheet } from 'react-native';
 import HomeNavigator from './HomeNavigator';
 import ProfilNavigator from './ProfilNavigator';
 import OrganisationProductionScreen from '../screens/OrganisationProductionScreen';
-import TracabiliteScreen from '../screens/TracabiliteScreen';
+import TracabiliteNavigator from './TracabiliteNavigator'
 
 const activeColor = "#1a9cd4";
 const inactiveColor = "#283c46";
@@ -35,7 +35,7 @@ const TabNavigator = () => {
                 headerShown: false})}
  initialRouteName="Accueil">
                 <Tab.Screen name="Accueil" component={HomeNavigator} />
-                <Tab.Screen name="Tracabilité" component={TracabiliteScreen} />
+                <Tab.Screen name="Tracabilité" component={TracabiliteNavigator} />
                 <Tab.Screen name="Organisation" component={OrganisationProductionScreen} />
                 <Tab.Screen name="Profil" component={ProfilNavigator} /> 
             </Tab.Navigator> 
