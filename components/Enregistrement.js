@@ -2,24 +2,20 @@
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import styled from "styled-components";
-import { TouchableOpacity } from "react-native";
+import { Alert, TouchableOpacity } from "react-native";
+import TracabiliteService from "../services/TracabiliteService";
 const  Enregistrement = props => {
 
-    const verify = () => {
-        console.log(props.Numero)
-        alert("Voulez vous supprimer l'enregistrement numéro " + props.Numero+  " ?");
-    }
+
 
     return(
             <Container>
                 <Caption>
                     {props.Numero} {props.Libelle}
                 </Caption>
-                <TouchableOpacity onPress={()=> verify()}>
                 <Logo>
                     <Ionicons name="trash-outline" size={60} color="white"/>
                 </Logo>
-                </TouchableOpacity>
 
             </Container>
     )

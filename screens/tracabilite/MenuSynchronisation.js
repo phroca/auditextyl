@@ -1,6 +1,6 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
-import { Dimensions, SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
+import { Dimensions, SafeAreaView, ScrollView, TouchableOpacity, StyleSheet,} from 'react-native';
 import styled from 'styled-components/native';
 import TracabiliteService from '../../services/TracabiliteService'
 import { formulaire } from "../../models/formulaire";

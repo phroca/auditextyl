@@ -1,10 +1,14 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import MenuAdminScreen from '../screens/Tracabilité/MenuAdminScreen';
-import MenuTracabilite from '../screens/Tracabilité/MenuTracabilite';
-import MenuStatistiques from '../screens/Tracabilité/MenuStatistiques';
-import MenuSynchronisation from '../screens/Tracabilité/MenuSynchronisation';
+import MenuAdminScreen from '../screens/tracabilite/MenuAdminScreen';
+import MenuTracabilite from '../screens/tracabilite/MenuTracabilite';
+import MenuStatistiques from '../screens/tracabilite/MenuStatistiques';
+import MenuSynchronisation from '../screens/tracabilite/MenuSynchronisation';
 import Annuler from '../components/Annuler';
-import MenuUtilisateur from '../screens/Tracabilité/MenuUtilisateur'
+import MenuUtilisateur from '../screens/tracabilite/MenuUtilisateur'
+import AjoutUtilisateur from '../screens/tracabilite/AjoutUtilisateur';
+import CameraScreen from '../screens/tracabilite/CameraScreen';
+import MenuEnregistrement from '../screens/tracabilite/MenuEnregistrement'
+import FormEnregistrement from '../screens/tracabilite/FormEnregistrement'
 
 
 const Stack = createNativeStackNavigator();
@@ -19,6 +23,10 @@ const TracabiliteNavigator = () => {
                 <Stack.Screen name="MenuStatistiques" component={MenuStatistiques} />
                 <Stack.Screen name="MenuSynchronisation" component={MenuSynchronisation} />
                 <Stack.Screen name="MenuUtilisateur" component={MenuUtilisateur} />
+                <Stack.Screen name="AjoutUtilisateur" component={AjoutUtilisateur} />
+                <Stack.Screen name="Camera" component={CameraScreen} />
+                <Stack.Screen name="MenuEnregistrement" component={MenuEnregistrement} />
+                <Stack.Screen name="FormEnregistrement" component={FormEnregistrement} />
             </Stack.Navigator>
         );
 }

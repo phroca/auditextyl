@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { Dimensions, SafeAreaView, ScrollView, TouchableOpacity} from 'react-native';
+import { Dimensions, SafeAreaView, ScrollView, TouchableOpacity, Alert} from 'react-native';
 import styled from 'styled-components/native';
 import TracabiliteService from '../../services/TracabiliteService'
 import { formulaire } from "../../models/formulaire";
@@ -28,6 +28,36 @@ const MenuTracabilite = ({navigation}) => {
 
   },[]);
 
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+  }, []);
+
+  const ConfimrationSuppr = (tracabilite) => {
+    Alert.alert(
+        'Confimration',
+        "Voulez vous supprimer l'enregistrement : " + tracabilite.Id + " " + tracabilite.Libelle + " ?",
+        [
+            {
+                text: 'oui',
+                onPress: () => {
+                  TracabiliteService.supprForm(tracabilite.Id);
+                  alert("L'enregistrement a bien été supprimé");
+                  
+                }
+            },
+            {
+                text: 'non',
+                onPress: () => {
+                    alert('No Pressed');
+                }
+            }
+        ]
+    )
+}
 
   useEffect(()=> {
     TracabiliteService.getListTracabilite().then((result)=> {
@@ -39,7 +69,7 @@ const MenuTracabilite = ({navigation}) => {
     }).catch((error) => {
       console.error(error);
     })
-  },[TracabiliteService])
+  },[])
 
   const NavAnnuler = () => {
       navigation.navigate("tracabilteHome");
@@ -49,9 +79,13 @@ const MenuTracabilite = ({navigation}) => {
     navigation.navigate("MenuUtilisateur");
  } 
 
+ const NavTracabilite = () => {
+  navigation.navigate("tracabilteHome");
+}
+
     return (
         <Container>
-
+        
             <ContainerContent>
             <SafeAreaView>
               <Profile>
@@ -73,19 +107,23 @@ const MenuTracabilite = ({navigation}) => {
                     <Text>Liste des enregistrements</Text>
                   </TouchableOpacity>
                   <ContainerList>
-                  {tracabilite.map((tracabilite, index) => (
+                  {tracabilite.map((tracabilite) => (
+                  <TouchableOpacity 
+                  key={tracabilite.Id}
+                  onPress={()=> ConfimrationSuppr(tracabilite)}>
                   <Enregistrement
                     key={tracabilite.Id}
                     Numero={tracabilite.Id}
                     Libelle={tracabilite.Libelle}
                   />
+                  </TouchableOpacity>
                     ))}
                   </ContainerList>
                 </ContainerWhite>
-                
               </ContainerGrey>
               </SafeAreaView>
             </ContainerContent>
+            
         </Container>
     )
 }

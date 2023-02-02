@@ -4,24 +4,22 @@ import styled from "styled-components";
 
 
 
-const  Utilisateur = props => {
-
+const  Animaux = props => {
     return(
             <Container>
                 <Cover>
-                    <Image source={{uri: props.Avatar,}}  />
+                    <Image source={{uri: props.Image,}}  />
                 </Cover>
                 <Content>
                     <Wrapper>
-                        <Caption>{props.Nom}</Caption>
-                        <Subtitle>{props.Prenom}</Subtitle>
+                        <Caption>{props.Libelle}</Caption>
                     </Wrapper>
                 </Content>
             </Container>
     )
 }
     
-export default Utilisateur;
+export default Animaux;
 
 const Content = styled.View`
     align-items: center;
@@ -35,12 +33,6 @@ const Caption = styled.Text`
     text-transform: uppercase;
 `;
 
-const Subtitle = styled.Text`
-    color: #b7bece;
-    font-size: 20px;
-    font-weight: 600;
-    margin-top: 4px;
-`;
 
 const Wrapper = styled.View`
     align-items: center;

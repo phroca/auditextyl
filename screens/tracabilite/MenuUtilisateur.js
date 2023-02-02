@@ -25,7 +25,7 @@ const MenuUtilisateur = ({navigation}) => {
       setUsername(user?.attributes?.given_name);
     })();
 
-  },[]);
+  },[tracabilite]);
 
   const [tracabilite, setTracabilite] = useState([]);
 
@@ -33,19 +33,27 @@ const MenuUtilisateur = ({navigation}) => {
     TracabiliteService.getListUsers().then((result)=> {
       if(result?.data) {
         setTracabilite(result?.data);
-        console.log(tracabilite);
       }
     }).catch((error) => {
       console.error(error);
     })
-  },[TracabiliteService])
-
+  },[])
 
 
 
   const NavAnnuler = () => {
       navigation.navigate("tracabilteHome");
   }
+
+  const NavAjoutUtilisateur = () => {
+    navigation.navigate("AjoutUtilisateur");
+  }
+
+  const NavValider = () => {
+    navigation.navigate("MenuEnregistrement");
+  }
+  
+
     return (
         <Container>
 
@@ -62,7 +70,7 @@ const MenuUtilisateur = ({navigation}) => {
               </Profile>
               <ContainerGrey>
                 <ContainerWhite>
-                  <TouchableOpacity onPress={()=> NavAnnuler()}>
+                  <TouchableOpacity onPress={()=> NavAjoutUtilisateur()}>
                     <ContainerButtonAdd>
                       <Title>Ajouter un utilisateur</Title>
                       <Ionicons name="add-circle-outline" size={60} color="white"/>
@@ -72,19 +80,22 @@ const MenuUtilisateur = ({navigation}) => {
                   <ScrollView showsVerticalScrollIndicator={false}>
                   <ContainerList>
                     {tracabilite.map((tracabilite) => (
-                        <TouchableOpacity>
-                            <Utilisateur 
-                                key={tracabilite.id}
-                                Avatar={tracabilite.Avatar}
-                                Nom={tracabilite.Nom}
-                                Prenom={tracabilite.Prenom}
-                            />
-                        </TouchableOpacity>    
+                      <TouchableOpacity
+                        key={tracabilite.Id}
+                        onPress={()=> NavValider()}
+                      >
+                        <Utilisateur 
+                          key={tracabilite.Id}
+                          Avatar={tracabilite.Avatar}
+                          Nom={tracabilite.Nom}
+                          Prenom={tracabilite.Prenom}
+                        />
+                      </TouchableOpacity>   
                     ))}
                   </ContainerList>
                   </ScrollView>
                   <ContainerValidation>
-                  <TouchableOpacity>
+                  <TouchableOpacity >
                     <ValiderTrue />
                   </TouchableOpacity>
                   </ContainerValidation>
