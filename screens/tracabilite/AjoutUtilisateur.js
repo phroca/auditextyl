@@ -185,9 +185,9 @@ const AjoutUtilisateur = ({navigation}) => {
                         <Text>Veuillez signer ici : </Text>
                         <TouchableOpacity ref={refSignature} isError={signatureError} 
                                 onPress={()=> setSignature(sign)}>
-                                  <OpenCamerabutton>
-                                    <Ionicons name="image-outline" size={100} color="white"></Ionicons>
-                                  </OpenCamerabutton>
+                                  <Signbutton>
+                                    <Ionicons name="pencil-outline" size={100} color="white"></Ionicons>
+                                  </Signbutton>
                         </TouchableOpacity>
                               <Modal
                                 animationType="slide"
@@ -222,15 +222,19 @@ const AjoutUtilisateur = ({navigation}) => {
                                   </View>
                                 </View>
                               </Modal>
-                              <Pressable
-                                style={[styles.button, styles.buttonOpen]}
+                              <Text>Choisissez votre animal :</Text>
+                              
+                              <TouchableOpacity
                                 onPress={() => setModalVisible(true)}>
-                                <Text style={styles.textStyle}>Liste des animaux</Text>
-                              </Pressable>
+                                <ModalButton>
+                                  <TextButtonModal>Liste des animaux</TextButtonModal>
+                                  </ModalButton>
+                              </TouchableOpacity>
+                              
                                 <TouchableOpacity onPress={()=> handleSubmit()}>
-                                    <ButtonView>
+                                    <ButtonAjout>
                                         <ButtonText>Ajouter l'utilisateur</ButtonText>
-                                    </ButtonView>
+                                    </ButtonAjout>
                                 </TouchableOpacity>
                             
                             
@@ -309,6 +313,39 @@ const OpenCamerabutton = styled.View`
   align-items: center;
 `;
 
+const Signbutton = styled.View`
+  background-color : #1A9CD4;
+  margin-left : 30px;
+  margin-top : 20px;
+  height: 110px;
+  width: 620px;
+  border-radius: 10px;
+  align-items: center;
+`;
+
+const ModalButton = styled.View`
+  background-color : #1A9CD4;
+  margin-top: 20px;
+  margin-left: 30px;
+  justify-content: center;
+  align-items: center;
+  height: 110px;
+  width: 620px;
+  border-radius: 10px;
+  align-items: center;
+`;
+
+const ButtonAjout = styled.View`
+  background-color : #1A9CD4;
+  margin-top: 90px;
+  margin-left: 30px;
+  justify-content: center;
+  align-items: center;
+  height: 110px;
+  width: 620px;
+  border-radius: 10px;
+  align-items: center;
+`;
 
 const InfoWrapper = styled.View`
     width: 420px;
@@ -330,7 +367,6 @@ const InformationContent = styled.View`
     flex-direction: row;
     width: 680px;
     height: 230px;
-    background: orange;
     margin-bottom: -30px;
 `;
 
@@ -346,9 +382,10 @@ const TextInput = styled.TextInput`
 `;
 
 const ButtonText = styled.Text`
-  color: #FFFFFF;
-  font-weight: bold;
-  font-size: 14px;
+  font-weight: 400;
+  font-size: 30px;
+  color: white;
+  text-align : center;
 `;
 
 const AjoutUtilisateurForm = styled.View`
@@ -385,6 +422,13 @@ const Profile = styled.View`
   justify-content: space-between;
 `
 
+const TextButtonModal = styled.Text`
+  font-weight: 400;
+  font-size: 30px;
+  color: white;
+  text-align : center;
+`;
+
 const Text = styled.Text`
   font-weight: 400;
   font-size: 30px;
@@ -414,15 +458,7 @@ const Name = styled.Text`
 `;
 
 
-const ButtonView = styled.View`
-  background: #1a9cd4;
-  width: ${widthContent}px;
-  height: 50px;
-  justify-content: center;
-  align-items: center;
-  border-radius: 10px;
-  margin-top: 20px;
-`;
+
 
 const Container = styled.View`
 position: relative;

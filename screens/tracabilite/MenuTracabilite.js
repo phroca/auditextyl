@@ -39,20 +39,19 @@ const MenuTracabilite = ({navigation}) => {
   const ConfimrationSuppr = (tracabilite) => {
     Alert.alert(
         'Confimration',
-        "Voulez vous supprimer l'enregistrement : " + tracabilite.Id + " " + tracabilite.Libelle + " ?",
+        `Voulez vous supprimer l'enregistrement : "${tracabilite.Libelle}" ?`,
         [
             {
                 text: 'oui',
                 onPress: () => {
                   TracabiliteService.supprForm(tracabilite.Id);
-                  alert("L'enregistrement a bien été supprimé");
-                  
+                  alert("L'enregistrement a bien été supprimé !");
                 }
             },
             {
                 text: 'non',
                 onPress: () => {
-                    alert('No Pressed');
+                    alert(`L'enregistrement n'a pas été supprimé !`);
                 }
             }
         ]
@@ -69,7 +68,7 @@ const MenuTracabilite = ({navigation}) => {
     }).catch((error) => {
       console.error(error);
     })
-  },[])
+  },[tracabilite])
 
   const NavAnnuler = () => {
       navigation.navigate("tracabilteHome");
@@ -85,7 +84,6 @@ const MenuTracabilite = ({navigation}) => {
 
     return (
         <Container>
-        
             <ContainerContent>
             <SafeAreaView>
               <Profile>
@@ -99,6 +97,7 @@ const MenuTracabilite = ({navigation}) => {
               </Profile>
               <ContainerGrey>
                 <ContainerWhite>
+                <ContainerTitle>Menu des enregistrements</ContainerTitle>
                   <TouchableOpacity onPress={()=> NavUtilisateur()}>
                     <ContainerButtonAdd>
                       <Title>Ajouter un nouvel enregistrement</Title>
@@ -106,19 +105,22 @@ const MenuTracabilite = ({navigation}) => {
                     </ContainerButtonAdd>
                     <Text>Liste des enregistrements</Text>
                   </TouchableOpacity>
-                  <ContainerList>
-                  {tracabilite.map((tracabilite) => (
-                  <TouchableOpacity 
-                  key={tracabilite.Id}
-                  onPress={()=> ConfimrationSuppr(tracabilite)}>
-                  <Enregistrement
-                    key={tracabilite.Id}
-                    Numero={tracabilite.Id}
-                    Libelle={tracabilite.Libelle}
-                  />
-                  </TouchableOpacity>
-                    ))}
-                  </ContainerList>
+                  
+                    <ContainerList>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                      {tracabilite.map((tracabilite) => (
+                      <TouchableOpacity 
+                      key={tracabilite.Id}
+                      onPress={()=> ConfimrationSuppr(tracabilite)}>
+                      <Enregistrement
+                        key={tracabilite.Id}
+                        Numero={tracabilite.Id}
+                        Libelle={tracabilite.Libelle}
+                      />
+                      </TouchableOpacity>
+                        ))}
+                      </ScrollView>
+                    </ContainerList>
                 </ContainerWhite>
               </ContainerGrey>
               </SafeAreaView>
@@ -130,16 +132,13 @@ const MenuTracabilite = ({navigation}) => {
 
 export default MenuTracabilite;
 
-const ContainerListContent = styled.View`
-  height: 100px;
-  width: 560px;
-  background: #D9D9D9;
-  border-radius: 10px;
-  margin-left: 30px;
-  margin-top: 30px;
-`;
 
-const ContainerList = styled.View``;
+
+
+const ContainerList = styled.View`
+  margin-bottom: 30px;
+  height : 560px;
+`;
 
 const Wrapper = styled.View`
 flex-direction: row;
@@ -247,4 +246,11 @@ const Title = styled.Text`
   color: white;
   margin-left: 30px;
   
+`;
+
+const ContainerTitle = styled.Text`
+  margin-top: 20px;
+  color: #1A9CD4;
+  font-size: 40px;
+  text-align: center;
 `;

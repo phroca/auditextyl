@@ -37,8 +37,7 @@ const MenuUtilisateur = ({navigation}) => {
     }).catch((error) => {
       console.error(error);
     })
-  },[])
-
+  },[tracabilite])
 
 
   const NavAnnuler = () => {

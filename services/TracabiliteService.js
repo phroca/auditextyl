@@ -11,6 +11,49 @@ const getListTracabilite = async() => {
     
 }
 
+// surfaces
+
+const getListSurface1 = async() => {
+    try{
+        console.log(API_URL + "/surface/surface1");
+        return axios.get(API_URL + "/surface/surface1");
+    } catch (error) {
+        console.log("ERREUR ", error);
+    }
+    
+}
+
+const getListSurface2 = async() => {
+    try{
+        console.log(API_URL + "/surface/surface2");
+        return axios.get(API_URL + "/surface/surface2");
+    } catch (error) {
+        console.log("ERREUR ", error);
+    }
+    
+}
+
+const getListSurface3 = async() => {
+    try{
+        console.log(API_URL + "/surface/surface3");
+        return axios.get(API_URL + "/surface/surface3");
+    } catch (error) {
+        console.log("ERREUR ", error);
+    }
+    
+}
+
+const getListSurface4 = async() => {
+    try{
+        console.log(API_URL + "/surface/surface4");
+        return axios.get(API_URL + "/surface/surface4");
+    } catch (error) {
+        console.log("ERREUR ", error);
+    }
+    
+}
+
+
 const getListUsers = async() => {
     try{
         console.log(API_URL + "/user");
@@ -56,6 +99,10 @@ const TracabiliteService = {
     supprForm,
     getListAnimaux,
     addUser,
+    getListSurface1,
+    getListSurface2,
+    getListSurface3,
+    getListSurface4,
 }
 
 

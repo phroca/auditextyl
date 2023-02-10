@@ -11,7 +11,7 @@ const  Enregistrement = props => {
     return(
             <Container>
                 <Caption>
-                    {props.Numero} {props.Libelle}
+                {props.Libelle}
                 </Caption>
                 <Logo>
                     <Ionicons name="trash-outline" size={60} color="white"/>
