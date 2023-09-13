@@ -82,6 +82,17 @@ const supprForm = async(tracabilite) => {
     }
 }
 
+const getUser = async(tracabilite) => {
+    try{
+        console.log(`${API_URL}/user/${tracabilite}`);
+        return axios.get(`${API_URL}/user/${tracabilite}`);
+    } catch (error) {
+        console.log("ERREUR ", error);
+    }
+}
+
+
+
 const addUser = async(newUtilisateur) => {
     try{
         return axios.put(`${API_URL}/user`, newUtilisateur);
@@ -90,8 +101,13 @@ const addUser = async(newUtilisateur) => {
     }
 }
 
-
-
+const addForm = async(newForm) => {
+    try{
+        return axios.put(`${API_URL}/form`, newForm);
+    } catch {
+        console.log("ERREUR ", error);
+    }
+}
 
 const TracabiliteService = {
     getListTracabilite,
@@ -103,6 +119,7 @@ const TracabiliteService = {
     getListSurface2,
     getListSurface3,
     getListSurface4,
+    addForm
 }
 
 

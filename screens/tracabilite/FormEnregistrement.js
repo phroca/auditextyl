@@ -10,6 +10,7 @@ import {
     StyleSheet,
     ScrollView,
     SafeAreaView,
+    Alert
   } from 'react-native';
   import React, {Profiler, useRef, useState, useEffect} from 'react';
 import styled, { StyleSheetManager } from 'styled-components';
@@ -20,24 +21,96 @@ import TracabiliteService from '../../services/TracabiliteService'
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Auth from "@aws-amplify/auth";
 import CalendarPicker from 'react-native-calendar-picker';
+import moment from 'moment';
+import SignatureCanvas from 'react-native-signature-canvas';
+
+
+//redux
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setForm } from '../../reducers/formReducer';
 
 const {height, width} = Dimensions.get('screen');
 
   
 const FormEnregistrement = ({navigation}) => {
 
+    const [selectedDate, setSelectedDate] = useState(null);
+
+    const handleDateChange = (date) => {
+        setSelectedDate(date);
+      };
+
+     
+      
+    // const visiteur  
+    const visiteur = useSelector(state => state.visiteur);
+    const nomVisiteur = visiteur.nom;
+    const prenomVisiteur = visiteur.prenom;
+    const avatarVisiteur = visiteur.avatar;
+    const animalVisiteur = visiteur.animal;
+    const IdVisiteur = visiteur.id;
+    const signatureVisiteur = visiteur.signature
+
+
+    // const signature
+
+    const [signatureChoisie, setSignatureChoisie] = useState("");
+
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const handleJeSigneMoiMemePress = () => {
+      // Ici, vous pouvez mettre le code pour ouvrir la modal
+      setModalVisible(true);
+    };
+  
+    const handleModalClose = () => {
+      // Ici, vous pouvez mettre le code pour fermer la modal
+      setModalVisible(false);
+    };
+
+      // Référence pour accéder à la signature canvas
+  const signatureRef = useRef(null);
+
+  // Fonction pour sauvegarder la signature
+  const handleSaveSignature = (signature) => {
+    // Ici, vous pouvez faire ce que vous voulez avec la signature, par exemple, la sauvegarder dans l'état
+    setSignatureChoisie(signature);
+    setModalVisible(false);
+  };
+
+    // const formulaire
+
+    const libelleForm = "Enregsitrement effectué(e) par: " + prenomVisiteur + " " + nomVisiteur + " le : " + moment(selectedDate).format('DD/MM/YYYY');
+    const dispatch = useDispatch();
+
+
+
+
+
     const NavAnnuler = () => {
         navigation.navigate("MenuEnregistrement");
-      }
+    }
+    const NavAuthentificationAnimaux = () => {
+        navigation.navigate("AuthentificationAnimaux");
+    }
+    
       
+      
+    
+    // SURFACES
 
     const [ListSurfaceChecked, setListSurfaceChecked] = useState([])
+
+    const listeDesSurfaces = ListSurfaceChecked.join(" - ");
 
     const [surface1, setSurface1] = useState([]);
     const [surface2, setSurface2] = useState([]);
     const [surface3, setSurface3] = useState([]);
     const [surface4, setSurface4] = useState([]);
 
+
+    
     useEffect(()=> {
         TracabiliteService.getListSurface1().then((result)=> {
           if(result?.data) {
@@ -82,9 +155,6 @@ const FormEnregistrement = ({navigation}) => {
         })
     },[])
 
-     // modal state
-
-     const [modalVisible, setModalVisible] = useState(false);
   const data = [
     {
         key: '001',
@@ -92,18 +162,32 @@ const FormEnregistrement = ({navigation}) => {
             () => {
             return(
                 <FlatListContent>
-                    <Title>Séléctionnez La date</Title>
-                        <CalendarPicker
-                            width={width-140}
-                            nextTitle='Suivant'
-                            previousTitle='Précedent'
-                            weekdays={['Dim','lun','Mar','Mer','Jeu','Ven','Sam']}
-                            months={['Janvier','Février','Mars','Avril','Mai','Juin','Juillet','Août','Septembre','Octobre','Novembre','Décembre']}
-                            selectedDayColor="#1A9CD4"
-                            selectedDayTextColor="#FFFFFF"s
-                         />
-                    <Text></Text>
-                </FlatListContent>
+                <Title>Sélectionnez la date</Title>
+                <CalendarPicker
+                  width={width - 140}
+                  nextTitle='Suivant'
+                  previousTitle='Précédent'
+                  weekdays={['Dim', 'Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam']}
+                  months={[
+                    'Janvier',
+                    'Février',
+                    'Mars',
+                    'Avril',
+                    'Mai',
+                    'Juin',
+                    'Juillet',
+                    'Août',
+                    'Septembre',
+                    'Octobre',
+                    'Novembre',
+                    'Décembre',
+                  ]}
+                  selectedDayColor='#1A9CD4'
+                  selectedDayTextColor='#FFFFFF'
+                  onDateChange={handleDateChange}
+                />
+                {selectedDate && <Text>Date sélectionnée : {moment(selectedDate).format('DD/MM/YYYY')}</Text>}
+              </FlatListContent>
             )
         }
     },
@@ -144,7 +228,10 @@ const FormEnregistrement = ({navigation}) => {
                     <ContainerList>
                         <ListSurface>
                             {surface2.map((surface2) => (
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => 
+                                    setListSurfaceChecked(ListSurfaceChecked => [...ListSurfaceChecked, surface2.Libelle])
+                                }    
+                                >
                                     <Surface 
                                         Libelle={surface2.Libelle}
                                         Image={surface2.Image}
@@ -167,7 +254,10 @@ const FormEnregistrement = ({navigation}) => {
                     <ContainerList>
                         <ListSurface>
                             {surface3.map((surface3) => (
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => 
+                                    setListSurfaceChecked(ListSurfaceChecked => [...ListSurfaceChecked, surface3.Libelle])
+                                }    
+                                >
                                     <Surface 
                                         Libelle={surface3.Libelle}
                                         Image={surface3.Image}
@@ -190,7 +280,10 @@ const FormEnregistrement = ({navigation}) => {
                     <ContainerList>
                         <ListSurface>
                             {surface4.map((surface4) => (
-                                <TouchableOpacity>
+                                <TouchableOpacity onPress={() => 
+                                    setListSurfaceChecked(ListSurfaceChecked => [...ListSurfaceChecked, surface4.Libelle])
+                                }    
+                                >
                                     <Surface 
                                     Libelle={surface4.Libelle}
                                     Image={surface4.Image}
@@ -220,32 +313,37 @@ const FormEnregistrement = ({navigation}) => {
                             <ImgResume></ImgResume>
                         </ContainerControl>
                         <ContainerDate>
-                            <ResumeCaption>Enregistrement effectué le : </ResumeCaption>
-                            <ResumeCaption>10/02/2023</ResumeCaption>
+                        <ResumeCaption>Enregistrement effectué le : </ResumeCaption>
+                        {selectedDate ? (
+                            <ResumeCaption>{moment(selectedDate).format('DD/MM/YYYY')}</ResumeCaption>
+                        ) : (
+                            <ResumeCaption>Aucune date</ResumeCaption>
+                        )}
                         </ContainerDate>
                     <CaptionResume>Liste des surfaces traitées :</CaptionResume>
                     <ScrollView showsVerticalScrollIndicator={false}>
-                        <ContainerListeSurface>
-                        { ListSurfaceChecked.map((item, key) => (
-                            <ContainerSurface>
+                        {ListSurfaceChecked.length > 0 ? (
+                            <ContainerListeSurface>
+                            {ListSurfaceChecked.map((item, key) => (
+                                <ContainerSurface>
                                 <ContainerText>
                                     <ResumeCaption key={key}>{item}</ResumeCaption>
                                 </ContainerText>
-                                <TouchableOpacity>
-                                    <BoutonModifSurface>
-                                        <Ionicons name="pencil-outline" size={35} color="white"></Ionicons>
-                                    </BoutonModifSurface>
-                                </TouchableOpacity>
-                            </ContainerSurface>
-                        ))}
-                        </ContainerListeSurface>
-                        </ScrollView> 
+                                </ContainerSurface>
+                            ))}
+                            </ContainerListeSurface>
+                        ) : (
+                            <AlerteRouge>Aucune surface(s) sélectionnée(s), veuillez en sélectionner au moins une.</AlerteRouge>
+                        )}
+                        </ScrollView>
+                        {ListSurfaceChecked.length > 0 && (
                         <TouchableOpacity onPress={() => setListSurfaceChecked([])}>
                             <BoutonToutSupprmimer>
-                                <BoutonToutSupprmimerCaption>Tout Supprimer</BoutonToutSupprmimerCaption>
-                                <Ionicons name="trash-outline" size={60} color="white"/>
+                            <BoutonToutSupprmimerCaption>Tout Supprimer</BoutonToutSupprmimerCaption>
+                            <Ionicons name="trash-outline" size={60} color="white" />
                             </BoutonToutSupprmimer>
                         </TouchableOpacity>
+                        )}
                     </ContainerResume>
                 </FlatListContent>
             )
@@ -255,60 +353,64 @@ const FormEnregistrement = ({navigation}) => {
         key: '007',
         component : 
             () => {
-            return(
-                    
+            return(  
                 <FlatListContent>
-                    <Title>Choissez Votre mode de   signature</Title>
-                        <ContainerSelectSignature>
-                            <CaptionSignature>Ma signature:</CaptionSignature>
-                                <ContainerSignature>
-                                    <Text>signaure</Text>  
-                                </ContainerSignature>
-                            <CaptionSignature>Signer moi même:</CaptionSignature>
-                            <Modal
-                                animationType="slide"
-                                transparent={true}
-                                visible={modalVisible}
-                                onRequestClose={() => {
-                                  setModalVisible(!modalVisible);
-                                }}>
-                                <ContainerModal>
-                                    <ContainerModalWhite>
-                                        <ContainerModalGrey>
-                                            <ModalTitle>Signature</ModalTitle>
-                                            <SignaturePad>
-                                                <Text>aaaaa</Text>
-                                            </SignaturePad>
-                                            <ModalButtonContainer>
-                                                    <TouchableOpacity onPress={() => 
-                                                        setModalVisible(false)
-                                                    }>
-                                                        <ButtonModal>
-                                                            <Caption>Annuler</Caption>
-                                                        </ButtonModal>
-                                                    </TouchableOpacity>
-                                                    <TouchableOpacity onPress={() => 
-                                                        setModalVisible(false)
-                                                    }>
-                                                        <ButtonModal>
-                                                            <Caption>Signer</Caption>
-                                                        </ButtonModal>
-                                                    </TouchableOpacity>
-                                            </ModalButtonContainer>
-                                            
-                                        </ContainerModalGrey>
-                                    </ContainerModalWhite>
-                                  
-                                </ContainerModal>
-                              </Modal>
-                                <TouchableOpacity  onPress={() => [
-                                    setModalVisible(true)
-                                ]}>
-                                    <BoutonSignature>
-                                        <Ionicons name="pencil-outline" size={150} color="white"/>
-                                    </BoutonSignature>
-                                </TouchableOpacity>
-                        </ContainerSelectSignature>
+                    <Title>Choisissez Votre mode de signature</Title>
+                    <ContainerSelectSignature>
+                        <ContainerOptionSignature>
+                        <TouchableOpacity onPress={() => setSignatureChoisie(signatureVisiteur)}>
+                            <BoutonSignature>
+                            <Text>Ma signature par défaut</Text>
+                            </BoutonSignature>
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={handleJeSigneMoiMemePress}>
+                            <BoutonSignature>
+                            <Text>Je signe Moi-même</Text>
+                            </BoutonSignature>
+                        </TouchableOpacity>
+                        </ContainerOptionSignature>
+                        <ContainerOptionSignature>
+                        {signatureChoisie ? (
+                            <Signature source={{ uri: signatureChoisie }} />
+                        ) : (
+                            <Text>Aucune signature choisie</Text>
+                        )}
+                        </ContainerOptionSignature>
+                    </ContainerSelectSignature>
+                    <Modal
+                        visible={isModalVisible}
+                        animationType="slide"
+                        onRequestClose={handleModalClose}
+                    >
+                    <Profile>
+                                <Wrapper>
+                                    <Img source={{uri: avatarVisiteur}}/>
+                                    <Name>{prenomVisiteur} {nomVisiteur}</Name>
+                                </Wrapper>
+                        </Profile>
+                        <ContainerModal>
+                        <Title>Veuillez signer</Title>
+                        <SignatureContainer>
+                            <CanvasWrapper>
+                            <SignatureCanvas
+                                ref={signatureRef}
+                                onOK={handleSaveSignature}
+                                onEmpty={() => console.log('Signature canvas is empty')}
+                                descriptionText=""
+                                clearText="Effacer"
+                                confirmText="Sauvegarder"
+
+                            />
+                            </CanvasWrapper>
+                        </SignatureContainer>
+
+                        <TouchableOpacity onPress={handleModalClose}>
+                            <BoutonFermerModal>
+                            <CaptionModal>Fermer</CaptionModal>
+                            </BoutonFermerModal>
+                        </TouchableOpacity>
+                        </ContainerModal>
+                    </Modal>
                 </FlatListContent>
             )
         }
@@ -317,6 +419,8 @@ const FormEnregistrement = ({navigation}) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const ref = useRef();
   const libelleButton = data.length - 1 == currentIndex ? 'Envoyer' : 'Précedent';
+
+
   //const [formulaire, setFormulaire] = useState([]);
   
   //const touchableOpacityMode = formulaire == '' ? true : false
@@ -341,8 +445,8 @@ const FormEnregistrement = ({navigation}) => {
                         <ContainerWhite>
                             <Profile>
                                 <Wrapper>
-                                    <Img></Img>
-                                    <Name>Louis</Name>
+                                    <Img source={{uri: avatarVisiteur}}/>
+                                    <Name>{prenomVisiteur} {nomVisiteur}</Name>
                                 </Wrapper>
                                 <TouchableOpacity onPress={()=> NavAnnuler()}>
                                     <Annuler/>
@@ -354,11 +458,16 @@ const FormEnregistrement = ({navigation}) => {
                                 <TouchableOpacity
                                     //disabled={touchableOpacityMode}
                                     onPress={() => {
+                                        if(currentIndex == data.length -1){
+                                            NavAuthentificationAnimaux()
+                                            dispatch(setForm(moment(selectedDate).format('DD/MM/YYYY'), libelleForm, listeDesSurfaces, signatureChoisie))
+                                        }else{
                                         const prevItemIndex = currentIndex > 0 ? currentIndex - 1 : 0;
                                         const offset = prevItemIndex * width;
                                         ref?.current?.scrollToOffset({offset});
                                         setCurrentIndex(prevItemIndex);
-
+                                        }
+                                        
                                     }}
                                     style={{
                                     width: data.length - 1 == currentIndex ? '100%' : 200,
@@ -441,15 +550,7 @@ padding-right: 20px;
 margin-left : 30px;
 `;
 
-const BoutonModifSurface = styled.View`
-background: #1A9CD4;
-border-radius:  30px;
-width: 60px;
-height: 60px;
-margin-left: 30px;
-align-items: center;
-justify-content: center;
-`;
+
 
 const ContainerText = styled.View`
     justify-content: center;
@@ -494,6 +595,16 @@ const CaptionResume = styled.Text`
   padding-bottom : 20px;
   margin-left: 30px;
 `;
+
+const AlerteRouge = styled.Text`
+  color: red;
+  font-size: 30px;
+  padding-top : 20px;
+  padding-bottom : 20px;
+  margin-left: 30px;
+  text-align: center;
+`;
+
 
 const ContainerResume = styled.View`
     background-color: white;
@@ -663,82 +774,80 @@ const ContainerConfirmation = styled.View`
 
 // Signature
 
+const BoutonFermerModal = styled.View`
+background: #1A9CD4;
+width: 150px;
+height: 60px;
+border-radius: 10px;
+margin-left: 30px;
+align-items: center;
+justify-content: center;
+`;
+
+const CaptionModal = styled.Text`
+    color: white;
+  font-size: 30px;
+  text-align: center;
+`;
+
+const Signature = styled.Image`
+    width: 100%;
+    height: 100%;
+`;
+
 const ContainerModal = styled.View`
-    flex: 1;
-    align-items: center;
+  flex: 1;
+  justify-content: center;
+  align-items: center;
 `;
 
-const ModalButtonContainer = styled.View`
-    justify-content: space-between;
+const SignatureContainer = styled.View`
+  width: 700px; /* Ajustez la largeur souhaitée */
+  height: 500px; /* Ajustez la hauteur souhaitée */
+`;
+
+const CanvasWrapper = styled.View`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+`;
+
+    
+const ContainerOptionSignature = styled.View`
+    width: ${width - 240}px;
+    margin-left: 30px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    height: 260px;
+    border-radius: 10px;
     flex-direction: row;
-    align-items:  center;
-    width: ${width - 120}px;
-    margin-top : 30px;
-    `;
-
-const SignaturePad = styled.View`
-    background-color: white;
-    width: ${width - 120}px;
-    height: ${height - 309}px;
-    border-radius: 10px;
-`;
-
-const ContainerModalWhite = styled.View`
-    background-color: white;
-    width: ${width}px;
-    height: ${height}px;
-    border-radius: 10px;
-    padding : 30px;
-`;
-
-const ModalTitle = styled.Text`
-    color: #1A9CD4;
-    font-size: 40px;
-    text-align: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
-`;
-
-const ContainerModalGrey = styled.View`
-    background-color: #D9D9D9;
-    width: ${width - 60}px;
-    height: ${height - 80}px;
-    border-radius: 10px;
     align-items: center;
+    justify-content : center;
 `;
+
 
 const BoutonSignature = styled.View`
     background-color: #1A9CD4;
-    width: ${width - 450}px;
-    margin-left: 30px;
-    height: 210px;
-    margin-top: 20px;
+    width: 230px;
+    height: 140px;
+    margin-left: 15px;
+    margin-right: 15px;
     align-items: center;
     justify-content: center;
     border-radius: 10px;
 `;
 
-const ContainerSignature = styled.View`
+const AppercuSignature = styled.View`
     background-color: white;
-    width: ${width - 450}px;
-    margin-left: 30px;
-    height: 210px;
-    margin-top: 20px;
-    align-items: center;
-    justify-content: center;
-    border : 6px solid #D9D9D9;
+    width: 320px;
+    height: 240px;
     border-radius: 10px;
-`;
-
-const CaptionSignature = styled.Text`
-  color: #1A9CD4;
-  font-size: 30px;
-  padding-top : 20px;
-  margin-left: 30px;
-`;
+    border: 6px solid #D9D9D9;
+`
 
 const ContainerSelectSignature = styled.View`
     background-color: white;
+    justify-content: center;
     width: ${width - 180}px;
     border-radius: 10px;
     height: ${height - 660}px;
@@ -764,7 +873,7 @@ border-radius:  50px;
 width: 100px;
 height: 100px;
 margin-left :30px;
-border: 6px solid #1A9CD4;
+border: 3px solid #1A9CD4;
 `
 
 const Name = styled.Text`

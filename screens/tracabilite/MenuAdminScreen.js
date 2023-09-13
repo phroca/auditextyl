@@ -16,7 +16,7 @@ const TracabiliteScreen = ({navigation}) => {
       navigation.navigate("MenuTracabilite");
   }
   const NavSatistiques = () => {
-    navigation.navigate("MenuStatistiques");
+    navigation.navigate("AuthentificationAnimaux");
   }
   const NavSynchronisation = () => {
     navigation.navigate("MenuSynchronisation");

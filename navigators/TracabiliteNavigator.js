@@ -4,11 +4,13 @@ import MenuTracabilite from '../screens/tracabilite/MenuTracabilite';
 import MenuStatistiques from '../screens/tracabilite/MenuStatistiques';
 import MenuSynchronisation from '../screens/tracabilite/MenuSynchronisation';
 import Annuler from '../components/Annuler';
-import MenuUtilisateur from '../screens/tracabilite/MenuUtilisateur'
+import MenuUtilisateur from '../screens/tracabilite/MenuUtilisateur';
 import AjoutUtilisateur from '../screens/tracabilite/AjoutUtilisateur';
 import CameraScreen from '../screens/tracabilite/CameraScreen';
-import MenuEnregistrement from '../screens/tracabilite/MenuEnregistrement'
-import FormEnregistrement from '../screens/tracabilite/FormEnregistrement'
+import MenuEnregistrement from '../screens/tracabilite/MenuEnregistrement';
+import FormEnregistrement from '../screens/tracabilite/FormEnregistrement';
+import AuthentificationAnimaux from '../screens/tracabilite/AuthentificationAnimaux';
+import Confirmation from '../screens/tracabilite/Confirmation';
 
 
 const Stack = createNativeStackNavigator();
@@ -27,6 +29,8 @@ const TracabiliteNavigator = () => {
                 <Stack.Screen name="Camera" component={CameraScreen} />
                 <Stack.Screen name="MenuEnregistrement" component={MenuEnregistrement} />
                 <Stack.Screen name="FormEnregistrement" component={FormEnregistrement} />
+                <Stack.Screen name="AuthentificationAnimaux" component={AuthentificationAnimaux} />
+                <Stack.Screen name="Confirmation" component={Confirmation} />
             </Stack.Navigator>
         );
 }
